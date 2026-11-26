@@ -206,3 +206,11 @@ button:focus-visible {
   background: rgba(34, 211, 238, 0.2);
   color: var(--accent);
 }
+/* Original reference frames supplied with the APEX Humanoid project */
+.app-container::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;background-position:center;background-size:cover;background-repeat:no-repeat;opacity:.15;mix-blend-mode:screen;transition:opacity .35s ease}
+.app-container--idle::before{background-image:url("https://raw.githubusercontent.com/HeshamZegoo/apex-humanoid-assets/main/apex-idle-v1.webp")}
+.app-container--listening::before{background-image:url("https://raw.githubusercontent.com/HeshamZegoo/apex-humanoid-assets/main/apex-listening-v1.webp")}
+.app-container--thinking::before{background-image:url("https://raw.githubusercontent.com/HeshamZegoo/apex-humanoid-assets/main/apex-thinking-v1.webp")}
+.app-container--speaking::before{background-image:url("https://raw.githubusercontent.com/HeshamZegoo/apex-humanoid-assets/main/apex-speaking-v1.webp")}
+.app-container{isolation:isolate}
+.app-container>*{position:relative}
