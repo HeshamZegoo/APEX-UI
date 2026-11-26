@@ -237,14 +237,23 @@ export default function ApexWorld() {
   // A tap cycles idle → thinking → speaking → idle. That state drives the
   // backdrop, the light-cast and the reasoning web's activity level.
   const [showState, setShowState] = useState<OrbState>("idle");
+  const [humanoidState, setHumanoidState] = useState<"idle" | "listening" | "thinking" | "speaking">("idle");
   const showTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const orbState: OrbState = showState;
 
+  // Tap sequence follows the humanoid's real image states. The existing orb
+  // status and reasoning graph stay in sync with the closest supported state.
   const boost = () => {
-    const next: OrbState = showState === "idle" ? "thinking" : showState === "thinking" ? "speaking" : "idle";
-    setShowState(next);
+    const sequence = ["idle", "listening", "thinking", "speaking"] as const;
+    const nextIndex = (sequence.indexOf(humanoidState) + 1) % sequence.length;
+    const next = sequence[nextIndex];
+    setHumanoidState(next);
+    setShowState(next === "speaking" ? "speaking" : next === "idle" ? "idle" : "thinking");
     if (showTimer.current) clearTimeout(showTimer.current);
-    showTimer.current = setTimeout(() => setShowState("idle"), 8000);
+    showTimer.current = setTimeout(() => {
+      setHumanoidState("idle");
+      setShowState("idle");
+    }, 8000);
   };
   useEffect(() => () => { if (showTimer.current) clearTimeout(showTimer.current); }, []);
 
@@ -323,15 +332,12 @@ export default function ApexWorld() {
       {/* Humanoid visual replaces the central orb while the original reasoning
           graph, agent roster, backdrop and status system remain intact. */}
       <div className="apex-humanoid-stage" style={{
-        position: "absolute", left: "50%", top: "50%",
-        width: "min(460px, 54vw)", height: "min(560px, 68vh)",
-        transform: "translate(-50%, -50%)", zIndex: 3,
+        position: "absolute", left: "50%", top: "49%",
+        width: "min(600px, 68vw)", height: "min(700px, 82vh)",
+        transform: "translate(-50%, -50%)", zIndex: 5,
         pointerEvents: "auto",
       }}>
-        <ApexHumanoid
-          state={orbState === "thinking" ? "thinking" : orbState === "speaking" ? "speaking" : "idle"}
-          onActivate={boost}
-        />
+        <ApexHumanoid state={humanoidState} onActivate={boost} />
       </div>
 
       {/* equalizer + STANDBY cluster */}
