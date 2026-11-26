@@ -55,3 +55,102 @@ body {
 @media (max-width: 700px) {
   .sb-hint { display: none; }
 }
+
+
+/* ── Apex humanoid visual ── */
+.apex-humanoid {
+  overflow: visible;
+  outline: none;
+}
+.apex-humanoid__backdrop {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  opacity: 0.22;
+  z-index: -2;
+  pointer-events: none;
+  user-select: none;
+}
+.apex-humanoid__aura {
+  position: absolute;
+  width: 68%;
+  height: 68%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0, 202, 255, 0.2) 0%, rgba(0, 135, 210, 0.08) 42%, transparent 72%);
+  filter: blur(28px);
+  z-index: -1;
+  animation: apexHumanoidPulse 4.8s ease-in-out infinite;
+  pointer-events: none;
+}
+.apex-humanoid__figure {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  object-position: center;
+  filter: drop-shadow(0 0 22px rgba(0, 205, 255, 0.18));
+  animation: apexHumanoidEnter 420ms ease-out both;
+  pointer-events: none;
+  user-select: none;
+}
+.apex-humanoid__readout {
+  position: absolute;
+  bottom: 3%;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 13px;
+  border: 1px solid rgba(0, 220, 255, 0.2);
+  border-radius: 999px;
+  background: rgba(3, 12, 22, 0.72);
+  color: rgba(174, 237, 255, 0.78);
+  font: 10px/1 var(--font-mono);
+  letter-spacing: 0.2em;
+  white-space: nowrap;
+  backdrop-filter: blur(12px);
+  pointer-events: none;
+}
+.apex-humanoid__readout-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #22d3ee;
+  box-shadow: 0 0 10px #22d3ee;
+  animation: apexHumanoidDot 1.5s ease-in-out infinite;
+}
+.apex-humanoid--thinking .apex-humanoid__figure {
+  filter: drop-shadow(0 0 30px rgba(0, 220, 255, 0.32));
+}
+.apex-humanoid--speaking .apex-humanoid__figure {
+  filter: drop-shadow(0 0 38px rgba(0, 225, 255, 0.48));
+}
+.apex-humanoid:focus-visible {
+  border-radius: 24px;
+  box-shadow: 0 0 0 2px rgba(34, 211, 238, 0.55);
+}
+@keyframes apexHumanoidPulse {
+  0%, 100% { transform: scale(0.94); opacity: 0.72; }
+  50% { transform: scale(1.06); opacity: 1; }
+}
+@keyframes apexHumanoidEnter {
+  from { opacity: 0.45; transform: scale(0.985); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes apexHumanoidDot {
+  0%, 100% { opacity: 0.45; }
+  50% { opacity: 1; }
+}
+@media (max-width: 700px) {
+  .apex-humanoid__readout { bottom: 1%; font-size: 9px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .apex-humanoid__aura,
+  .apex-humanoid__readout-dot,
+  .apex-humanoid__figure { animation: none; }
+}
