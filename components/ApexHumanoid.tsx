@@ -292,6 +292,7 @@ export default function ApexHumanoid({
       } : undefined}
       aria-label={onActivate ? "Activate APEX humanoid" : "APEX humanoid"}
     >
+      <img className="apex-humanoid__backdrop" src={SOURCES.backdrop} alt="" aria-hidden="true" draggable={false} />
       <div className="apex-humanoid__aura" aria-hidden="true" />
       <canvas ref={canvasRef} className="apex-humanoid__canvas" aria-hidden="true" />
       <div className="apex-humanoid__readout" aria-live="polite">
