@@ -57,10 +57,19 @@ body {
 }
 
 
-/* ── Apex humanoid visual ── */
+/* ── APEX humanoid: living particle figure ── */
 .apex-humanoid {
+  position: relative;
   overflow: visible;
   outline: none;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  isolation: isolate;
+  cursor: pointer;
+  perspective: 1100px;
+  -webkit-tap-highlight-color: transparent;
 }
 .apex-humanoid__backdrop {
   position: absolute;
@@ -68,52 +77,67 @@ body {
   width: 100%;
   height: 100%;
   object-fit: contain;
-  opacity: 0.22;
+  opacity: .18;
   z-index: -2;
   pointer-events: none;
   user-select: none;
+  mix-blend-mode: screen;
 }
 .apex-humanoid__aura {
   position: absolute;
-  width: 68%;
-  height: 68%;
+  width: 76%;
+  height: 76%;
+  left: 12%;
+  top: 10%;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(0, 202, 255, 0.2) 0%, rgba(0, 135, 210, 0.08) 42%, transparent 72%);
-  filter: blur(28px);
+  background:
+    radial-gradient(ellipse at 50% 42%, rgba(0,225,255,.22), rgba(0,145,225,.09) 38%, transparent 72%);
+  filter: blur(34px);
   z-index: -1;
-  animation: apexHumanoidPulse 4.8s ease-in-out infinite;
   pointer-events: none;
+  animation: apexHumanoidAura 5.5s ease-in-out infinite;
+  transition: filter .6s ease, opacity .6s ease;
 }
-.apex-humanoid__figure {
+.apex-humanoid__canvas {
   display: block;
   width: 100%;
   height: 100%;
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-  object-position: center;
-  filter: drop-shadow(0 0 22px rgba(0, 205, 255, 0.18));
-  animation: apexHumanoidEnter 420ms ease-out both;
+  overflow: visible;
+  filter: drop-shadow(0 0 15px rgba(0,205,255,.15));
+  transform: translateZ(0);
   pointer-events: none;
-  user-select: none;
+}
+.apex-humanoid--listening .apex-humanoid__aura {
+  background: radial-gradient(ellipse at 50% 42%, rgba(20,225,255,.28), rgba(0,145,225,.1) 42%, transparent 72%);
+}
+.apex-humanoid--thinking .apex-humanoid__aura {
+  filter: blur(42px);
+  opacity: 1;
+  background: radial-gradient(ellipse at 50% 42%, rgba(0,210,255,.32), rgba(0,110,210,.12) 45%, transparent 74%);
+}
+.apex-humanoid--speaking .apex-humanoid__aura {
+  filter: blur(48px);
+  background: radial-gradient(ellipse at 50% 42%, rgba(0,235,255,.4), rgba(0,145,240,.16) 48%, transparent 76%);
+  animation-duration: 1.6s;
 }
 .apex-humanoid__readout {
   position: absolute;
-  bottom: 3%;
+  bottom: 2%;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 7px 13px;
-  border: 1px solid rgba(0, 220, 255, 0.2);
+  padding: 8px 14px;
+  border: 1px solid rgba(0,220,255,.2);
   border-radius: 999px;
-  background: rgba(3, 12, 22, 0.72);
-  color: rgba(174, 237, 255, 0.78);
+  background: rgba(3,12,22,.74);
+  color: rgba(174,237,255,.82);
   font: 10px/1 var(--font-mono);
-  letter-spacing: 0.2em;
+  letter-spacing: .2em;
   white-space: nowrap;
-  backdrop-filter: blur(12px);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 0 22px rgba(0,190,255,.08), inset 0 0 18px rgba(0,190,255,.04);
   pointer-events: none;
 }
 .apex-humanoid__readout-dot {
@@ -121,36 +145,37 @@ body {
   height: 6px;
   border-radius: 50%;
   background: #22d3ee;
-  box-shadow: 0 0 10px #22d3ee;
+  box-shadow: 0 0 10px #22d3ee, 0 0 20px rgba(34,211,238,.55);
   animation: apexHumanoidDot 1.5s ease-in-out infinite;
 }
-.apex-humanoid--thinking .apex-humanoid__figure {
-  filter: drop-shadow(0 0 30px rgba(0, 220, 255, 0.32));
-}
-.apex-humanoid--speaking .apex-humanoid__figure {
-  filter: drop-shadow(0 0 38px rgba(0, 225, 255, 0.48));
+.apex-humanoid__loading {
+  position: absolute;
+  left: 50%;
+  top: 85%;
+  transform: translateX(-50%);
+  color: rgba(151,226,245,.55);
+  font: 9px/1 var(--font-mono);
+  letter-spacing: .18em;
+  white-space: nowrap;
+  pointer-events: none;
 }
 .apex-humanoid:focus-visible {
   border-radius: 24px;
-  box-shadow: 0 0 0 2px rgba(34, 211, 238, 0.55);
+  box-shadow: 0 0 0 2px rgba(34,211,238,.55);
 }
-@keyframes apexHumanoidPulse {
-  0%, 100% { transform: scale(0.94); opacity: 0.72; }
-  50% { transform: scale(1.06); opacity: 1; }
-}
-@keyframes apexHumanoidEnter {
-  from { opacity: 0.45; transform: scale(0.985); }
-  to { opacity: 1; transform: scale(1); }
+@keyframes apexHumanoidAura {
+  0%, 100% { transform: scale(.92); opacity: .72; }
+  50% { transform: scale(1.08); opacity: 1; }
 }
 @keyframes apexHumanoidDot {
-  0%, 100% { opacity: 0.45; }
-  50% { opacity: 1; }
+  0%, 100% { opacity: .42; transform: scale(.85); }
+  50% { opacity: 1; transform: scale(1.18); }
 }
 @media (max-width: 700px) {
   .apex-humanoid__readout { bottom: 1%; font-size: 9px; }
+  .apex-humanoid__aura { filter: blur(24px); }
 }
 @media (prefers-reduced-motion: reduce) {
   .apex-humanoid__aura,
-  .apex-humanoid__readout-dot,
-  .apex-humanoid__figure { animation: none; }
+  .apex-humanoid__readout-dot { animation: none; }
 }
