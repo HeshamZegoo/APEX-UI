@@ -52,7 +52,7 @@ function sampleFrame(image: HTMLImageElement): Frame {
   ctx.drawImage(image, (width - w) / 2, (height - h) / 2, w, h);
   const pixels = ctx.getImageData(0, 0, width, height).data;
   const dots: Dot[] = [];
-  const step = 3;
+  const step = 4;
 
   for (let y = 1; y < height - 1; y += step) {
     for (let x = 1; x < width - 1; x += step) {
@@ -153,6 +153,7 @@ export default function ApexHumanoid({
     if (!canvas || !host || !ctx) return;
 
     let raf = 0;
+    let lastPaint = 0;
     let width = 1;
     let height = 1;
     let dpr = 1;
@@ -174,7 +175,8 @@ export default function ApexHumanoid({
 
     const render = (now: number) => {
       raf = requestAnimationFrame(render);
-      if (!loaded) return;
+      if (!loaded || now - lastPaint < 32) return;
+      lastPaint = now;
       const frames = framesRef.current;
       const active = stateRef.current;
       if (active !== lastState) {
@@ -209,14 +211,15 @@ export default function ApexHumanoid({
           ctx.clip();
         }
         const breath = reducedMotion ? 0 : Math.sin(seconds * 1.15) * 1.35;
-        const headTurn = reducedMotion ? 0 : pointerRef.current.x * 0.014;
+        const headTurn = reducedMotion ? 0 : pointerRef.current.x * 0.055;
         const headLift = reducedMotion ? 0 : pointerRef.current.y * 0.008;
         for (let i = 0; i < frame.dots.length; i++) {
           const dot = frame.dots[i];
           const isHead = dot.y < 205;
           const movement = reducedMotion ? 0 : Math.sin(seconds * dot.speed + dot.phase + seed) * (0.24 + (active === "speaking" ? 0.65 : 0.2));
-          const x = left + (dot.x - 210) * scale * (isHead ? 1 + headTurn : 1);
-          const y = top + (dot.y - 260) * scale + (dot.y > 300 ? breath : isHead ? headLift : 0) + movement * scale;
+          const headOffset = (dot.x - 210) / 210;
+          const x = left + (dot.x - 210) * scale * (isHead ? 1 - Math.abs(headOffset) * Math.abs(headTurn) * 0.24 : 1) + (isHead ? headTurn * 13 * scale : 0);
+          const y = top + (dot.y - 260) * scale + (dot.y > 300 ? breath : isHead ? headLift + headOffset * headTurn * 5 * scale : 0) + movement * scale;
           const pulse = reducedMotion ? 1 : 0.78 + 0.22 * Math.sin(seconds * (active === "speaking" ? 5.2 : 2.1) + dot.phase);
           ctx.globalAlpha = dot.alpha * pulse;
           ctx.fillStyle = dot.color;
@@ -250,7 +253,7 @@ export default function ApexHumanoid({
         }
       } else {
         const from = frames[previousRef.current] || frames.idle;
-        const to = frames[active] || frames.idle;
+        const to = (active === "speaking" ? frames.speakingStrong : frames[active]) || frames[active] || frames.idle;
         const progress = reducedMotion ? 1 : Math.min(1, (now - transitionRef.current) / 980);
         if (progress >= 1) {
           drawFrame(to);
