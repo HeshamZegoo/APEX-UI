@@ -92,6 +92,7 @@ export default function ApexHumanoid({
   const stateRef = useRef<HumanoidState>(state);
   const previousRef = useRef<HumanoidState>(state);
   const transitionRef = useRef(0);
+  const birthStartRef = useRef(0);
   const [loaded, setLoaded] = useState(false);
   const [birthDone, setBirthDone] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
@@ -129,6 +130,7 @@ export default function ApexHumanoid({
       return;
     }
     let cancelled = false;
+    birthStartRef.current = performance.now();
     const timer1 = window.setTimeout(() => {
       if (cancelled) return;
       previousRef.current = "idle";
@@ -226,9 +228,7 @@ export default function ApexHumanoid({
       };
 
       if (!birthDone) {
-        const elapsed = now - (transitionRef.current || now);
-        const birthStart = (window.performance.now() - 2450);
-        const phase = Math.max(0, Math.min(1, (now - birthStart) / 2450));
+        const phase = Math.max(0, Math.min(1, (now - birthStartRef.current) / 2450));
         const a = frames.assembly25;
         const b = frames.assembly60;
         const idle = frames.idle;
