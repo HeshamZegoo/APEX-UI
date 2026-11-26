@@ -20,7 +20,6 @@ import {
   type FaceState, 
   QUERY_PARAMS,
 } from './constants';
-import './original.css';
 
 // Parse URL query parameters and set window.__HUM_* variables (matches original)
 function parseQueryParams(): {
