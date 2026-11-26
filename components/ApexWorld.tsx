@@ -11,7 +11,7 @@
  */
 
 import { useEffect, useRef, useState } from "react";
-import ApexHeroOrb, { type OrbState } from "./ApexHeroOrb";
+import type { OrbState } from "./ApexHeroOrb";
 import ApexHumanoid from "./ApexHumanoid";
 import ReasoningWebJs from "./ReasoningWeb";
 import ShaderBackgroundJs from "./ShaderBackground";
