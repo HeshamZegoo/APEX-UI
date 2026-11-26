@@ -12,6 +12,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import ApexHeroOrb, { type OrbState } from "./ApexHeroOrb";
+import ApexHumanoid from "./ApexHumanoid";
 import ReasoningWebJs from "./ReasoningWeb";
 import ShaderBackgroundJs from "./ShaderBackground";
 import OrbStatusBar from "./OrbStatusBar";
@@ -319,26 +320,19 @@ export default function ApexWorld() {
         </ul>
       </nav>
 
-      {/* the core - painted ABOVE the web (app order); display-only, the tap target
-          is the circular disc below so agent nodes near the ring stay clickable */}
-      <div style={{ position: "absolute", left: "50%", top: "50%", width: "min(560px, 58vw)", height: "min(500px, 56vw, 70vh)", transform: "translate(-50%, -50%)", zIndex: 3, pointerEvents: "none" }}>
-        <ApexHeroOrb state={orbState} interactive={false} />
+      {/* Humanoid visual replaces the central orb while the original reasoning
+          graph, agent roster, backdrop and status system remain intact. */}
+      <div style={{
+        position: "absolute", left: "50%", top: "50%",
+        width: "min(650px, 76vw)", height: "min(690px, 82vh)",
+        transform: "translate(-50%, -50%)", zIndex: 3,
+        pointerEvents: "auto",
+      }}>
+        <ApexHumanoid
+          state={orbState === "thinking" ? "thinking" : orbState === "speaking" ? "speaking" : "idle"}
+          onActivate={boost}
+        />
       </div>
-
-      {/* central tap disc - covers the ring only (nodes orbit outside it) */}
-      <div
-        role="button"
-        tabIndex={0}
-        aria-label="Apex core - tap to energize"
-        onClick={boost}
-        onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); boost(); } }}
-        onMouseDown={(e) => e.preventDefault()}
-        style={{
-          position: "absolute", left: "50%", top: "50%", transform: "translate(-50%, -50%)",
-          width: "min(340px, 36vw)", height: "min(340px, 36vw)", borderRadius: "50%",
-          zIndex: 4, cursor: "pointer", background: "transparent", border: "none", userSelect: "none",
-        }}
-      />
 
       {/* equalizer + STANDBY cluster */}
       <OrbStatusBar state={orbState} />
