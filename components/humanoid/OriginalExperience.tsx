@@ -1,3 +1,5 @@
+"use client";
+
 // Apex Humanoid - Main App Component
 // Entry point that manages the complete experience
 
