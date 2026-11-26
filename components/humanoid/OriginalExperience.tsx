@@ -213,7 +213,7 @@ function App() {
 
   // Main experience
   return (
-    <div className="app-container">
+    <div className={`app-container app-container--${currentState}`}>
       <HumanoidScene
         isActive={isActive}
         onAssemblyComplete={handleAssemblyComplete}
