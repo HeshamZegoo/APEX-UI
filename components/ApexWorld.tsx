@@ -291,14 +291,14 @@ export default function ApexWorld() {
         transition: "background 0.6s ease",
       }} />
 
-      {/* the reasoning web - app z-order: web (z13) sits BELOW the orb canvas (z15),
-          so the bloom haze washes over the lines near the centre, exactly like the app */}
+      {/* Keep the agent graph above the smaller humanoid stage so labels and nodes
+          remain readable instead of being hidden behind the figure. */}
       {/* ReasoningWeb is a verbatim copy from the Apex app: its 18 agent nodes are
           imperative SVG hit-areas with no tabindex, inside an svg[role=img] that
           collapses the whole graph into a single image. Rather than edit the copy,
           the graph is marked decorative here and the same onSelect path is exposed
           through the equivalent list of real buttons below. */}
-      <div aria-hidden="true" style={{ position: "absolute", inset: 0, zIndex: 2, pointerEvents: "none" }}>
+      <div aria-hidden="true" style={{ position: "absolute", inset: 0, zIndex: 4, pointerEvents: "none" }}>
         <ReasoningWeb
           state={webState}
           mode="full"
@@ -322,9 +322,9 @@ export default function ApexWorld() {
 
       {/* Humanoid visual replaces the central orb while the original reasoning
           graph, agent roster, backdrop and status system remain intact. */}
-      <div style={{
+      <div className="apex-humanoid-stage" style={{
         position: "absolute", left: "50%", top: "50%",
-        width: "min(650px, 76vw)", height: "min(690px, 82vh)",
+        width: "min(460px, 54vw)", height: "min(560px, 68vh)",
         transform: "translate(-50%, -50%)", zIndex: 3,
         pointerEvents: "auto",
       }}>
