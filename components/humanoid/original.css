@@ -214,3 +214,6 @@ button:focus-visible {
 .app-container--speaking::before{background-image:url("https://raw.githubusercontent.com/HeshamZegoo/apex-humanoid-assets/main/apex-speaking-v1.webp")}
 .app-container{isolation:isolate}
 .app-container>*{position:relative}
+
+.entry-screen{background-image:linear-gradient(rgba(0,0,0,.82),rgba(0,0,0,.94)),url("https://raw.githubusercontent.com/HeshamZegoo/apex-humanoid-assets/main/apex-assembly-25-v1.webp");background-position:center;background-size:cover}
+.app-container::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:url("https://raw.githubusercontent.com/HeshamZegoo/apex-humanoid-assets/main/backdrop-v1.webp") center/cover no-repeat;opacity:.08}
